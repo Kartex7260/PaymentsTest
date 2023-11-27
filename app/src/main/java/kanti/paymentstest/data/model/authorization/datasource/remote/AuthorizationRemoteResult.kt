@@ -14,7 +14,8 @@ sealed class AuthorizationRemoteResult {
 	class Error(errorMessage: ErrorMessage) : AuthorizationRemoteResult()
 
 	class Fail(
-		val message: String
+		val message: String,
+		throwable: Throwable? = null
 	) : AuthorizationRemoteResult()
 
 }
