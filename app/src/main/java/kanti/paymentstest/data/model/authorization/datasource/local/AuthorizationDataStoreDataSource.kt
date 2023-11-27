@@ -7,6 +7,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kanti.paymentstest.Const
 import kanti.paymentstest.data.model.authorization.LoginToken
+import kanti.paymentstest.data.model.authorization.TokenResult
 import kanti.paymentstest.data.model.common.LocalResult
 import kanti.paymentstest.data.model.common.localTryCatch
 import kotlinx.coroutines.flow.Flow
@@ -21,13 +22,13 @@ class AuthorizationDataStoreDataSource @Inject constructor(
 
 	private val tokenKey = stringPreferencesKey(Const.DATA_STORE_KEY_TOKEN)
 
-	override val token: Flow<TokenLocalResult>
+	override val token: Flow<TokenResult>
 		get() = context.dataStore.data.map { preferences ->
 			val token = preferences[tokenKey]
 			if (token == null) {
-				TokenLocalResult.NotLoggedIn
+				TokenResult.NotLoggedIn
 			} else {
-				TokenLocalResult.Success(
+				TokenResult.Success(
 					LoginToken(
 						token = token
 					)
