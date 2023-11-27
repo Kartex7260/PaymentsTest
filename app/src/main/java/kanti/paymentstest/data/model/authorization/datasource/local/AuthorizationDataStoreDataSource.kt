@@ -8,7 +8,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kanti.paymentstest.Const
 import kanti.paymentstest.data.model.authorization.LoginToken
 import kanti.paymentstest.data.model.authorization.TokenResult
-import kanti.paymentstest.data.model.common.LocalResult
 import kanti.paymentstest.data.model.common.localTryCatch
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -36,7 +35,7 @@ class AuthorizationDataStoreDataSource @Inject constructor(
 			}
 		}
 
-	override suspend fun setToken(token: LoginToken): LocalResult<Unit> {
+	override suspend fun setToken(token: LoginToken): Result<Unit> {
 		return localTryCatch {
 			context.dataStore.edit { preferences ->
 				preferences[tokenKey] = token.token
@@ -44,7 +43,7 @@ class AuthorizationDataStoreDataSource @Inject constructor(
 		}
 	}
 
-	override suspend fun deleteToken(): LocalResult<Unit> {
+	override suspend fun deleteToken(): Result<Unit> {
 		return localTryCatch {
 			context.dataStore.edit { preferences ->
 				preferences.minusAssign(tokenKey)

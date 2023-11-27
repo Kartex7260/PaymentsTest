@@ -1,5 +1,6 @@
 package kanti.paymentstest.data.model.authorization.datasource.remote
 
+import kanti.paymentstest.data.model.authorization.AuthorizationResult
 import kanti.paymentstest.data.model.authorization.LoginToken
 import javax.inject.Inject
 
@@ -9,7 +10,7 @@ class AuthorizationRetrofitDataSource @Inject constructor(
 
 	private val unexpectedError = "Unexpected error!"
 
-	override suspend fun login(login: String, password: String): AuthorizationRemoteResult {
+	override suspend fun login(login: String, password: String): AuthorizationResult {
 		try {
 			val tokenDto = authorizationService.login(
 				LoginDTO(
@@ -18,7 +19,7 @@ class AuthorizationRetrofitDataSource @Inject constructor(
 				)
 			)
 			return if (tokenDto.success && tokenDto.response != null) {
-				AuthorizationRemoteResult.Success(
+				AuthorizationResult.Success(
 					LoginToken(
 						token = tokenDto.response.token
 					)
@@ -26,15 +27,15 @@ class AuthorizationRetrofitDataSource @Inject constructor(
 			} else if (!tokenDto.success && tokenDto.error != null) {
 				when (tokenDto.error.errorCode) {
 					1003 -> {
-						AuthorizationRemoteResult.IncorrectCredentials
+						AuthorizationResult.IncorrectCredentials
 					}
-					else -> AuthorizationRemoteResult.Error(tokenDto.error)
+					else -> AuthorizationResult.Error(tokenDto.error)
 				}
 			} else {
-				AuthorizationRemoteResult.Fail(unexpectedError)
+				AuthorizationResult.Fail(unexpectedError)
 			}
 		} catch (th: Throwable) {
-			return AuthorizationRemoteResult.Fail(th.message ?: "[No message]", th)
+			return AuthorizationResult.Fail(th.message ?: "[No message]", th)
 		}
 	}
 
