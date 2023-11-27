@@ -1,7 +1,8 @@
-package kanti.paymentstest
+package kanti.paymentstest.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import kanti.paymentstest.R
 
 class MainActivity : AppCompatActivity() {
 
