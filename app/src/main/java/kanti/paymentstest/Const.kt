@@ -10,4 +10,6 @@ object Const {
 	const val API_VERSION_KEY = "v"
 	const val API_VERSION_VALUE = "1"
 
+	const val DATA_STORE_KEY_TOKEN = "token"
+
 }
