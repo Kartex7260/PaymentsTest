@@ -7,8 +7,3 @@ data class MetaData<Data>(
 	val response: Data?,
 	val error: ErrorMessage?
 )
-
-data class ErrorMessage(
-	@SerializedName("error_code") val errorCode: Int,
-	@SerializedName("error_msg") val errorMessage: String
-)
