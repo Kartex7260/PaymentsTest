@@ -13,8 +13,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kanti.paymentstest.R
 import kanti.paymentstest.data.model.authorization.LoginToken
 import kanti.paymentstest.databinding.FragmentScreenPaymentsBinding
+import kanti.paymentstest.ui.fragments.common.hideErrorCard
 import kanti.paymentstest.ui.fragments.common.observe
 import kanti.paymentstest.ui.fragments.common.setUpToolbar
+import kanti.paymentstest.ui.fragments.common.showErrorCard
 import kanti.paymentstest.ui.fragments.paymentsscreen.viewmodel.PaymentsScreenViewModel
 import kanti.paymentstest.ui.fragments.paymentsscreen.viewmodel.PaymentsUiState
 import kanti.paymentstest.ui.fragments.paymentsscreen.viewmodel.SyncPaymentsUiState
@@ -29,6 +31,7 @@ class PaymentsScreenFragment : Fragment() {
 		get() = _viewBinding!!
 
 	private val viewModel by viewModels<PaymentsScreenViewModel>()
+	private var token: LoginToken? = null
 
 	private val paymentsRecyclerAdapter = PaymentsRecyclerAdapter()
 
@@ -70,6 +73,7 @@ class PaymentsScreenFragment : Fragment() {
 			when (uiState) {
 				is TokenUiState.Empty -> {}
 				is TokenUiState.Success -> {
+					this.token = uiState.token
 					viewModel.syncPayments(uiState.token)
 				}
 				is TokenUiState.NotLoggedIn -> {
@@ -85,15 +89,29 @@ class PaymentsScreenFragment : Fragment() {
 			viewBinding.paymentsProgressIndicator.visibility = View.GONE
 
 			when (uiState) {
-				is SyncPaymentsUiState.Empty -> {}
-				is SyncPaymentsUiState.Success -> {}
+				is SyncPaymentsUiState.Empty -> {
+					hideErrorCard()
+				}
+				is SyncPaymentsUiState.Success -> {
+					hideErrorCard()
+				}
 				is SyncPaymentsUiState.IncorrectToken -> {
+					hideErrorCard()
 					val navDirections = PaymentsScreenFragmentDirections.actionPaymentsToLogin()
 					findNavController().navigate(navDirections)
 				}
 				is SyncPaymentsUiState.NoConnection -> {
+					showErrorCard(
+						getString(R.string.no_connection),
+						getString(R.string.refresh)
+					) {
+						token?.let {
+							viewModel.syncPayments(it)
+						}
+					}
 				}
 				is SyncPaymentsUiState.Error -> {
+					hideErrorCard()
 					Log.e(logTag, uiState.error.toString())
 					Toast.makeText(
 						requireContext(),
@@ -105,6 +123,7 @@ class PaymentsScreenFragment : Fragment() {
 					viewBinding.paymentsProgressIndicator.visibility = View.VISIBLE
 				}
 				is SyncPaymentsUiState.Fail -> {
+					hideErrorCard()
 					Log.e(logTag, uiState.message, uiState.th)
 					Toast.makeText(
 						requireContext(),
