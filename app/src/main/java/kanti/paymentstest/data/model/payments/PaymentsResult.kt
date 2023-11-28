@@ -8,6 +8,8 @@ sealed class PaymentsResult {
 		val payments: List<Payment>
 	) : PaymentsResult()
 
+	data object NoConnection : PaymentsResult()
+
 	data object IncorrectToken : PaymentsResult()
 
 	class Error(

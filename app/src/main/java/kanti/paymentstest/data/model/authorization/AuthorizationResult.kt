@@ -8,6 +8,8 @@ sealed class AuthorizationResult {
 		val loginToken: LoginToken
 	) : AuthorizationResult()
 
+	data object NoConnection : AuthorizationResult()
+
 	data object IncorrectCredentials : AuthorizationResult()
 
 	class Error(

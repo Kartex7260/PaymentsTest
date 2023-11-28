@@ -2,6 +2,7 @@ package kanti.paymentstest.data.model.authorization.datasource.remote
 
 import kanti.paymentstest.data.model.authorization.AuthorizationResult
 import kanti.paymentstest.data.model.authorization.LoginToken
+import java.io.IOException
 import javax.inject.Inject
 
 class AuthorizationRetrofitDataSource @Inject constructor(
@@ -34,6 +35,8 @@ class AuthorizationRetrofitDataSource @Inject constructor(
 			} else {
 				AuthorizationResult.Fail(unexpectedError)
 			}
+		} catch (ex: IOException) {
+			return AuthorizationResult.NoConnection
 		} catch (th: Throwable) {
 			return AuthorizationResult.Fail(th.message ?: "[No message]", th)
 		}

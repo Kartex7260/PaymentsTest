@@ -1,6 +1,7 @@
 package kanti.paymentstest.data.model.payments.datasource.remote
 
 import kanti.paymentstest.data.model.payments.PaymentsResult
+import java.io.IOException
 import javax.inject.Inject
 
 class PaymentsRetrofitDataSource @Inject constructor(
@@ -23,7 +24,9 @@ class PaymentsRetrofitDataSource @Inject constructor(
 			} else {
 				PaymentsResult.Fail("Unexpected error")
 			}
-		} catch (th: Throwable) {
+		} catch(ex: IOException) {
+			PaymentsResult.NoConnection
+		} catch(th: Throwable) {
 			PaymentsResult.Fail(th.message ?: "[Not message]", th)
 		}
 	}
