@@ -4,9 +4,7 @@ import kanti.paymentstest.data.model.common.ErrorMessage
 
 sealed class PaymentsResult {
 
-	class Success(
-		val payments: List<Payment>
-	) : PaymentsResult()
+	data object Success : PaymentsResult()
 
 	data object NoConnection : PaymentsResult()
 

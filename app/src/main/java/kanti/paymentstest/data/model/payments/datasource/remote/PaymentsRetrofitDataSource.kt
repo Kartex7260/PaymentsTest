@@ -1,6 +1,5 @@
 package kanti.paymentstest.data.model.payments.datasource.remote
 
-import kanti.paymentstest.data.model.payments.PaymentsResult
 import java.io.IOException
 import javax.inject.Inject
 
@@ -8,26 +7,26 @@ class PaymentsRetrofitDataSource @Inject constructor(
 	private val paymentsService: PaymentsService
 ) : PaymentsRemoteDataSource {
 
-	override suspend fun getPayments(authToken: String): PaymentsResult {
+	override suspend fun getPayments(authToken: String): PaymentsRemoteResult {
 		return try {
 			val payments = paymentsService.getPayments(authToken)
 
 			if (payments.success && payments.response != null) {
-				PaymentsResult.Success(
+				PaymentsRemoteResult.Success(
 					payments = payments.response.map { it.toPayment() }
 				)
 			} else if (!payments.success && payments.error != null) {
 				when (payments.error.errorCode) {
-					1001 -> PaymentsResult.IncorrectToken
-					else -> PaymentsResult.Error(payments.error)
+					1001 -> PaymentsRemoteResult.IncorrectToken
+					else -> PaymentsRemoteResult.Error(payments.error)
 				}
 			} else {
-				PaymentsResult.Fail("Unexpected error")
+				PaymentsRemoteResult.Fail("Unexpected error")
 			}
 		} catch(ex: IOException) {
-			PaymentsResult.NoConnection
+			PaymentsRemoteResult.NoConnection
 		} catch(th: Throwable) {
-			PaymentsResult.Fail(th.message ?: "[Not message]", th)
+			PaymentsRemoteResult.Fail(th.message ?: "[Not message]", th)
 		}
 	}
 }
