@@ -11,21 +11,17 @@ class LoginUiBehavior(
 	private val loginField: TextInputEditText,
 	private val passwordField: TextInputEditText,
 	private val loginButton: MaterialButton,
-	private val loginClick: (
-		login: String,
-		password: String,
-		callback: () -> Unit
-	) -> Unit,
+	private val loginClick: LoginClickListener,
 ) {
 
-	private var loginOk: Boolean = false
+	private var loginState: FieldState = FieldState.Empty
 		set(value) {
 			field = value
 			updateButton()
 			updateEdiText(loginField, value)
 		}
 
-	private var passwordOk: Boolean = false
+	private var passwordState: FieldState = FieldState.Empty
 		set(value) {
 			field = value
 			updateButton()
@@ -35,23 +31,36 @@ class LoginUiBehavior(
 	init {
 		loginField.addTextChangedListener(
 			onTextChanged = { text, _, _, _ ->
-				loginOk = !text.isNullOrBlank()
+				loginState = if (text.isNullOrBlank())
+					FieldState.Empty
+				else
+					FieldState.Ok
 			}
 		)
 
 		passwordField.addTextChangedListener(
 			onTextChanged = { text, _, _, _ ->
-				passwordOk = !text.isNullOrBlank()
+				passwordState = if (text.isNullOrBlank())
+					FieldState.Empty
+				else
+					FieldState.Ok
 			}
 		)
 
 		loginButton.setOnClickListener {
 			allEnabled(false)
-			loginClick(
+			loginClick.onClick(
 				loginField.text?.toString() ?: "",
 				passwordField.text?.toString() ?: ""
-			) {
+			) { callbackType ->
 				allEnabled(true)
+				when (callbackType) {
+					LoginClickCallback.CallbackType.Success -> {}
+					LoginClickCallback.CallbackType.IncorrectCredentials -> {
+						loginState = FieldState.Incorrect
+						passwordState = FieldState.Incorrect
+					}
+				}
 			}
 		}
 	}
@@ -69,16 +78,22 @@ class LoginUiBehavior(
 		loginButton.isEnabled = false
 	}
 
-	private fun updateEdiText(editText: TextInputEditText, isOk: Boolean) {
-		if (isOk) {
-			editText.error = null
-		} else {
-			editText.error = context.getString(R.string.edit_text_empty_error)
+	private fun updateEdiText(editText: TextInputEditText, fieldState: FieldState) {
+		when (fieldState) {
+			FieldState.Ok -> {
+				editText.error = null
+			}
+			FieldState.Empty -> {
+				editText.error = context.getString(R.string.edit_text_empty_error)
+			}
+			FieldState.Incorrect -> {
+				editText.error = context.getString(R.string.invalid_credentials)
+			}
 		}
 	}
 
 	private fun updateButton() {
-		loginButton.isEnabled = loginOk && passwordOk
+		loginButton.isEnabled = loginState.isOk && passwordState.isOk
 	}
 
 	private fun allEnabled(enabled: Boolean) {
@@ -86,5 +101,15 @@ class LoginUiBehavior(
 		passwordField.isEnabled = enabled
 		loginButton.isEnabled = enabled
 	}
+
+}
+
+enum class FieldState {
+
+	Ok,
+	Empty,
+	Incorrect;
+
+	val isOk: Boolean get () = this == Ok
 
 }
