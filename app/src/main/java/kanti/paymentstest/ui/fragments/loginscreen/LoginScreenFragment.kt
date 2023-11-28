@@ -61,8 +61,12 @@ class LoginScreenFragment : Fragment() {
 			viewBinding.screenLoginProgressIndicator.visibility = View.GONE
 
 			when (uiState) {
-				is LoginUiState.Empty -> {}
+				is LoginUiState.Empty -> {
+					hideError()
+					loginCallback?.onCallback(LoginClickCallback.CallbackType.Success)
+				}
 				is LoginUiState.Success -> {
+					hideError()
 					loginCallback?.onCallback(LoginClickCallback.CallbackType.Success)
 					val navDirections = LoginScreenFragmentDirections.actionLoginToPayments()
 					findNavController().navigate(navDirections)
@@ -71,11 +75,16 @@ class LoginScreenFragment : Fragment() {
 					viewBinding.screenLoginProgressIndicator.visibility = View.VISIBLE
 				}
 				is LoginUiState.NoConnection -> {
+					showError(getString(R.string.no_connection))
+					loginCallback?.onCallback(LoginClickCallback.CallbackType.Success)
 				}
 				is LoginUiState.IncorrectCredentials -> {
+					hideError()
 					loginCallback?.onCallback(LoginClickCallback.CallbackType.IncorrectCredentials)
 				}
 				is LoginUiState.Error -> {
+					hideError()
+					loginCallback?.onCallback(LoginClickCallback.CallbackType.Success)
 					Log.e(logTag, uiState.errorMessage.toString())
 					Toast.makeText(
 						requireContext(),
@@ -84,6 +93,8 @@ class LoginScreenFragment : Fragment() {
 					).show()
 				}
 				is LoginUiState.Fail -> {
+					hideError()
+					loginCallback?.onCallback(LoginClickCallback.CallbackType.Success)
 					Log.e(logTag, uiState.message, uiState.throwable)
 					Toast.makeText(
 						requireContext(),
@@ -103,6 +114,20 @@ class LoginScreenFragment : Fragment() {
 	private fun login(login: String, password: String, callback: LoginClickCallback) {
 		viewModel.login(login, password)
 		loginCallback = callback
+	}
+
+	private fun showError(text: String) {
+		viewBinding.screenLoginTextViewError.apply {
+			visibility = View.VISIBLE
+			this.text = text
+		}
+	}
+
+	private fun hideError() {
+		viewBinding.screenLoginTextViewError.apply {
+			visibility = View.GONE
+			text = null
+		}
 	}
 
 }
