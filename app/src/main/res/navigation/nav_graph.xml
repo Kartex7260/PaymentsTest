@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/paymentsScreenFragment">
 
+    <fragment
+        android:id="@+id/paymentsScreenFragment"
+        android:name="kanti.paymentstest.ui.fragments.paymentsscreen.PaymentsScreenFragment"
+        android:label="PaymentsScreenFragment">
+        <action
+            android:id="@+id/action_payments_to_login"
+            app:destination="@id/loginScreenFragment"
+            app:popUpTo="@id/paymentsScreenFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginScreenFragment"
+        android:name="kanti.paymentstest.ui.fragments.loginscreen.LoginScreenFragment"
+        android:label="LoginScreenFragment" >
+        <action
+            android:id="@+id/action_login_to_payments"
+            app:destination="@id/paymentsScreenFragment"
+            app:popUpTo="@id/loginScreenFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

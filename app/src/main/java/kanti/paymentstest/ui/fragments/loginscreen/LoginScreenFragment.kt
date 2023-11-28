@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import kanti.paymentstest.databinding.FragmentScreenLoginBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class LoginScreenFragment : Fragment() {
 
 	private var _viewBinding: FragmentScreenLoginBinding? = null
