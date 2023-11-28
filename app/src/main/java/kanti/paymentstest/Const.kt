@@ -4,6 +4,8 @@ object Const {
 
 	const val BASE_URL = "https://easypay.world/api-test/"
 
+	const val DATABASE_NAME = "payments"
+
 	const val APP_KEY_KEY = "app-key"
 	const val APP_KEY_VALUE = "12345"
 

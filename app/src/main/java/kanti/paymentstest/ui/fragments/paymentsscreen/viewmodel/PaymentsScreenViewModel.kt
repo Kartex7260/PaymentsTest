@@ -53,6 +53,7 @@ class PaymentsScreenViewModel @Inject constructor(
 	fun logout() {
 		viewModelScope.launch {
 			authorizationRepository.logout()
+			paymentsRepository.deleteCache()
 		}
 	}
 

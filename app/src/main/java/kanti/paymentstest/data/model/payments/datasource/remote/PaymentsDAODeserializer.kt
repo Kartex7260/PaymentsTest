@@ -6,10 +6,9 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import kanti.paymentstest.Const
 import java.lang.ClassCastException
-import java.lang.NumberFormatException
 import java.lang.reflect.Type
 
-object PaymentsDAODeserializer : JsonDeserializer<PaymentDAO> {
+object PaymentsDAODeserializer : JsonDeserializer<PaymentDTO> {
 
 	private const val idKey = Const.Gson.Payments.ID_KEY
 	private const val titleKey = Const.Gson.Payments.TITLE_KEY
@@ -20,14 +19,14 @@ object PaymentsDAODeserializer : JsonDeserializer<PaymentDAO> {
 		json: JsonElement,
 		typeOfT: Type?,
 		context: JsonDeserializationContext?
-	): PaymentDAO {
+	): PaymentDTO {
 		val jsonObject = json.asJsonObject
 		val id = jsonObject.getId()
 		val title = jsonObject.getTitle()
 		val amount = jsonObject.getAmount()
 		val created = jsonObject.getCreated()
 
-		return PaymentDAO(
+		return PaymentDTO(
 			id = id,
 			title = title,
 			amount = amount,

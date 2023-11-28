@@ -8,4 +8,6 @@ interface PaymentsRepository {
 
 	suspend fun getPayments(authToken: String): PaymentsResult
 
+	suspend fun deleteCache(): Result<Unit>
+
 }
