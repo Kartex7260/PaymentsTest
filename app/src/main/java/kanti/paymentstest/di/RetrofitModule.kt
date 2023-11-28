@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kanti.paymentstest.Const
 import kanti.paymentstest.data.model.authorization.datasource.remote.AuthorizationService
+import kanti.paymentstest.data.model.payments.datasource.remote.PaymentsService
 import kanti.paymentstest.net.HeadInterceptor
 import kanti.paymentstest.net.gson.paymentsGsonConverterFactory
 import okhttp3.OkHttpClient
@@ -32,6 +33,12 @@ object RetrofitModule {
 	@Singleton
 	fun provideAuthorizationService(retrofit: Retrofit): AuthorizationService {
 		return retrofit.create(AuthorizationService::class.java)
+	}
+
+	@Provides
+	@Singleton
+	fun providePaymentsService(retrofit: Retrofit): PaymentsService {
+		return retrofit.create(PaymentsService::class.java)
 	}
 
 }

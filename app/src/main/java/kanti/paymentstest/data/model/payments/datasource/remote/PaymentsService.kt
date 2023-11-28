@@ -6,7 +6,7 @@ import retrofit2.http.Header
 
 interface PaymentsService {
 
-	@GET
+	@GET("payments")
 	suspend fun getPayments(@Header("token") authToken: String): MetaArray<PaymentDAO>
 
 }
