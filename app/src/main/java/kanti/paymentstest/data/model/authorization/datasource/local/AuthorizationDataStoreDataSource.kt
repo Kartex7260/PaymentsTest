@@ -10,6 +10,7 @@ import kanti.paymentstest.data.model.authorization.LoginToken
 import kanti.paymentstest.data.model.authorization.TokenResult
 import kanti.paymentstest.data.model.common.localTryCatch
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -33,6 +34,8 @@ class AuthorizationDataStoreDataSource @Inject constructor(
 					)
 				)
 			}
+		}.catch {
+			TokenResult.Fail(it.message ?: "[Not message]", it)
 		}
 
 	override suspend fun setToken(token: LoginToken): Result<Unit> {

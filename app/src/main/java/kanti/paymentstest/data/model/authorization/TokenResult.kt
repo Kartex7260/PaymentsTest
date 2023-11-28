@@ -6,4 +6,9 @@ sealed class TokenResult {
 
 	data object NotLoggedIn : TokenResult()
 
+	class Fail(
+		val message: String,
+		val th: Throwable? = null
+	) : TokenResult()
+
 }
