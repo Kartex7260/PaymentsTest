@@ -2,6 +2,7 @@ package kanti.paymentstest.ui.view.recycleradapters
 
 import android.annotation.SuppressLint
 import android.icu.text.DateFormat
+import android.icu.text.DecimalFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,10 @@ class PaymentsRecyclerAdapter(
 ) : RecyclerView.Adapter<PaymentsRecyclerAdapter.PaymentViewHolder>() {
 
 	private val dateFormat = DateFormat.getDateTimeInstance()
+	private val numberFormat = DecimalFormat.getInstance().apply {
+		maximumFractionDigits = 2
+		minimumFractionDigits = 2
+	}
 
 	var payments: List<Payment> = payments
 		@SuppressLint("NotifyDataSetChanged")
@@ -42,7 +47,8 @@ class PaymentsRecyclerAdapter(
 				textViewAmount.visibility = View.GONE
 				textViewAmount.text = ""
 			} else {
-				textViewAmount.text = amount.toString()
+
+				textViewAmount.text = numberFormat.format(amount)
 				textViewAmount.visibility = View.VISIBLE
 			}
 		}
