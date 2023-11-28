@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kanti.paymentstest.data.model.authorization.AuthorizationRepository
+import kanti.paymentstest.data.model.authorization.LoginToken
 import kanti.paymentstest.data.model.authorization.TokenResult
 import kanti.paymentstest.data.model.payments.PaymentsRepository
 import kanti.paymentstest.data.model.payments.PaymentsResult
@@ -19,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PaymentsScreenViewModel @Inject constructor(
 	private val paymentsRepository: PaymentsRepository,
-	authorizationRepository: AuthorizationRepository
+	private val authorizationRepository: AuthorizationRepository
 ) : ViewModel() {
 
 	val payments: StateFlow<PaymentsUiState> = paymentsRepository.payments
@@ -49,11 +50,19 @@ class PaymentsScreenViewModel @Inject constructor(
 	private val _syncPayments = MutableStateFlow<SyncPaymentsUiState>(SyncPaymentsUiState.Empty)
 	val syncPayments: StateFlow<SyncPaymentsUiState> = _syncPayments.asStateFlow()
 
-	fun syncPayments(authToken: String) {
+	fun logout() {
+		viewModelScope.launch {
+			authorizationRepository.logout()
+		}
+	}
+
+	fun syncPayments(authToken: LoginToken) {
 		viewModelScope.launch {
 			_syncPayments.value = SyncPaymentsUiState.Process
 
-			_syncPayments.value = when (val payments = paymentsRepository.getPayments(authToken)) {
+			_syncPayments.value = when (
+				val payments = paymentsRepository.getPayments(authToken.token)
+			) {
 				is PaymentsResult.Success -> {
 					SyncPaymentsUiState.Success
 				}

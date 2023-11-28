@@ -10,8 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kanti.paymentstest.R
+import kanti.paymentstest.data.model.authorization.LoginToken
 import kanti.paymentstest.databinding.FragmentScreenPaymentsBinding
 import kanti.paymentstest.ui.fragments.common.observe
+import kanti.paymentstest.ui.fragments.common.setUpToolbar
 import kanti.paymentstest.ui.fragments.paymentsscreen.viewmodel.PaymentsScreenViewModel
 import kanti.paymentstest.ui.fragments.paymentsscreen.viewmodel.PaymentsUiState
 import kanti.paymentstest.ui.fragments.paymentsscreen.viewmodel.SyncPaymentsUiState
@@ -47,6 +50,12 @@ class PaymentsScreenFragment : Fragment() {
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
+		setUpToolbar(
+			navIcon = R.drawable.baseline_logout_24
+		) {
+			viewModel.logout()
+		}
+
 		observe(viewModel.payments) { uiState ->
 			when (uiState) {
 				is PaymentsUiState.Success -> {
@@ -60,7 +69,7 @@ class PaymentsScreenFragment : Fragment() {
 			when (uiState) {
 				is TokenUiState.Empty -> {}
 				is TokenUiState.Success -> {
-					viewModel.syncPayments(uiState.token.token)
+					viewModel.syncPayments(uiState.token)
 				}
 				is TokenUiState.NotLoggedIn -> {
 					val navDirections = PaymentsScreenFragmentDirections.actionPaymentsToLogin()
