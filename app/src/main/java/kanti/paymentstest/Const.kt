@@ -12,4 +12,13 @@ object Const {
 
 	const val DATA_STORE_KEY_TOKEN = "token"
 
+	object Gson {
+		object Payments {
+			const val ID_KEY = "id"
+			const val TITLE_KEY = "title"
+			const val AMOUNT_KEY = "amount"
+			const val CREATED_KEY = "created"
+		}
+	}
+
 }

@@ -7,9 +7,9 @@ import dagger.hilt.components.SingletonComponent
 import kanti.paymentstest.Const
 import kanti.paymentstest.data.model.authorization.datasource.remote.AuthorizationService
 import kanti.paymentstest.net.HeadInterceptor
+import kanti.paymentstest.net.gson.paymentsGsonConverterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -24,7 +24,7 @@ object RetrofitModule {
 			.client(OkHttpClient.Builder()
 				.addInterceptor(HeadInterceptor)
 				.build())
-			.addConverterFactory(GsonConverterFactory.create())
+			.addConverterFactory(paymentsGsonConverterFactory())
 			.build()
 	}
 
