@@ -13,7 +13,7 @@ class PaymentsRetrofitDataSource @Inject constructor(
 
 			if (payments.success && payments.response != null) {
 				PaymentsRemoteResult.Success(
-					payments = payments.response.map { it.toPayment() }
+					payments = payments.response.mapNotNull { it.toPayment() }
 				)
 			} else if (!payments.success && payments.error != null) {
 				when (payments.error.errorCode) {
