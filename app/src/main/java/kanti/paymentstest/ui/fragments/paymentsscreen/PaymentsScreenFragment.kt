@@ -1,6 +1,7 @@
 package kanti.paymentstest.ui.fragments.paymentsscreen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,8 @@ class PaymentsScreenFragment : Fragment() {
 
 	private val paymentsRecyclerAdapter = PaymentsRecyclerAdapter()
 
+	private val logTag = javaClass.simpleName
+
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -48,6 +51,7 @@ class PaymentsScreenFragment : Fragment() {
 			when (uiState) {
 				is PaymentsUiState.Success -> {
 					paymentsRecyclerAdapter.payments = uiState.payments
+					viewBinding.paymentsRecyclerView.adapter = paymentsRecyclerAdapter
 				}
 				is PaymentsUiState.Empty -> {}
 			}
@@ -78,16 +82,25 @@ class PaymentsScreenFragment : Fragment() {
 					findNavController().navigate(navDirections)
 				}
 				is SyncPaymentsUiState.NoConnection -> {
-
 				}
 				is SyncPaymentsUiState.Error -> {
-
+					Log.e(logTag, uiState.error.toString())
+					Toast.makeText(
+						requireContext(),
+						uiState.error.errorMessage,
+						Toast.LENGTH_SHORT
+					).show()
 				}
 				is SyncPaymentsUiState.Process -> {
 					viewBinding.paymentsProgressIndicator.visibility = View.VISIBLE
 				}
 				is SyncPaymentsUiState.Fail -> {
-					Toast.makeText(requireContext(), uiState.message, Toast.LENGTH_SHORT).show()
+					Log.e(logTag, uiState.message, uiState.th)
+					Toast.makeText(
+						requireContext(),
+						uiState.message,
+						Toast.LENGTH_SHORT
+					).show()
 				}
 			}
 		}

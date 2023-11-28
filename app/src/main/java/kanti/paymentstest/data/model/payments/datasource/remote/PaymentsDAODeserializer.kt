@@ -42,12 +42,16 @@ object PaymentsDAODeserializer : JsonDeserializer<PaymentDAO> {
 		if (isDouble != null)
 			return isDouble
 
-		return isString()
+		return isDoubleInString()
 	}
 
 	private fun JsonObject.getCreated(): Long? {
 		val created = get(createdKey) ?: return null
-		return created.asLong
+		return try {
+			created.asLong
+		} catch (ex: UnsupportedOperationException) {
+			null
+		}
 	}
 
 	private fun JsonElement.isDouble(): Double? {
@@ -55,10 +59,14 @@ object PaymentsDAODeserializer : JsonDeserializer<PaymentDAO> {
 			asDouble
 		} catch (ex: ClassCastException) {
 			null
+		} catch (ex: NumberFormatException) {
+			null
+		} catch (ex: UnsupportedOperationException) {
+			null
 		}
 	}
 
-	private fun JsonElement.isString(): Double? {
+	private fun JsonObject.isDoubleInString(): Double? {
 		return try {
 			val stg = asString
 			if (stg.isBlank())
@@ -68,6 +76,8 @@ object PaymentsDAODeserializer : JsonDeserializer<PaymentDAO> {
 		} catch (ex: ClassCastException) {
 			null
 		} catch (ex: NumberFormatException) {
+			null
+		} catch (ex: UnsupportedOperationException) {
 			null
 		}
 	}

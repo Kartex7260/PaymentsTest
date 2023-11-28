@@ -1,21 +1,19 @@
 package kanti.paymentstest.ui.fragments.loginscreen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kanti.paymentstest.databinding.FragmentScreenLoginBinding
 import kanti.paymentstest.ui.fragments.common.observe
 import kanti.paymentstest.ui.fragments.loginscreen.viewmodel.LoginScreenViewModel
 import kanti.paymentstest.ui.fragments.loginscreen.viewmodel.LoginUiState
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginScreenFragment : Fragment() {
@@ -28,6 +26,8 @@ class LoginScreenFragment : Fragment() {
 
 	private lateinit var loginUiBehavior: LoginUiBehavior
 	private var loginCallback: LoginClickCallback? = null
+
+	private val logTag = javaClass.simpleName
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -70,6 +70,7 @@ class LoginScreenFragment : Fragment() {
 					loginCallback?.onCallback(LoginClickCallback.CallbackType.IncorrectCredentials)
 				}
 				is LoginUiState.Error -> {
+					Log.e(logTag, uiState.errorMessage.toString())
 					Toast.makeText(
 						requireContext(),
 						uiState.errorMessage.errorMessage,
@@ -77,6 +78,7 @@ class LoginScreenFragment : Fragment() {
 					).show()
 				}
 				is LoginUiState.Fail -> {
+					Log.e(logTag, uiState.message, uiState.throwable)
 					Toast.makeText(
 						requireContext(),
 						uiState.message,

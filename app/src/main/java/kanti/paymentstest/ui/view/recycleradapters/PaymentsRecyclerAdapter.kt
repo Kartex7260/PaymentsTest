@@ -15,19 +15,16 @@ class PaymentsRecyclerAdapter(
 	payments: List<Payment> = listOf()
 ) : RecyclerView.Adapter<PaymentsRecyclerAdapter.PaymentViewHolder>() {
 
-	private val dateFormat = DateFormat.getDateInstance()
+	private val dateFormat = DateFormat.getDateTimeInstance()
 
 	var payments: List<Payment> = payments
-		get() = field
 		@SuppressLint("NotifyDataSetChanged")
 		set(value) {
 			field = value
-			notifyDataSetChanged()
+
 		}
 
 	inner class PaymentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-		private val date = Date()
 
 		private val textViewTitle = view.findViewById<MaterialTextView>(R.id.payment_card_text_view_title)
 		private val textViewAmount = view.findViewById<MaterialTextView>(R.id.payment_card_text_view_amount)
@@ -53,11 +50,11 @@ class PaymentsRecyclerAdapter(
 		private fun showCreated(created: Long?) {
 			if (created == null) {
 				textViewCreated.visibility = View.GONE
-				textViewAmount.text = ""
+				textViewCreated.text = ""
 			} else {
-				date.time = created
-				textViewAmount.text = dateFormat.format(date)
-				textViewAmount.visibility = View.VISIBLE
+				val date = Date(created)
+				textViewCreated.text = dateFormat.format(date)
+				textViewCreated.visibility = View.VISIBLE
 			}
 		}
 
