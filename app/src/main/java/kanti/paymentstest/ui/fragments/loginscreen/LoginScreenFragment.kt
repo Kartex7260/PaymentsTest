@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kanti.paymentstest.R
 import kanti.paymentstest.databinding.FragmentScreenLoginBinding
 import kanti.paymentstest.ui.fragments.common.observe
+import kanti.paymentstest.ui.fragments.common.setUpToolbar
 import kanti.paymentstest.ui.fragments.loginscreen.viewmodel.LoginScreenViewModel
 import kanti.paymentstest.ui.fragments.loginscreen.viewmodel.LoginUiState
 
@@ -50,6 +52,10 @@ class LoginScreenFragment : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+
+		setUpToolbar(
+			title = getString(R.string.login_account)
+		)
 
 		observe(viewModel.loginUiState) { uiState ->
 			viewBinding.screenLoginProgressIndicator.visibility = View.GONE

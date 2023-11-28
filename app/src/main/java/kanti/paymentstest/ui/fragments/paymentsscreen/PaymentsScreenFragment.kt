@@ -51,6 +51,7 @@ class PaymentsScreenFragment : Fragment() {
 		super.onViewCreated(view, savedInstanceState)
 
 		setUpToolbar(
+			title = getString(R.string.payments),
 			navIcon = R.drawable.baseline_logout_24
 		) {
 			viewModel.logout()

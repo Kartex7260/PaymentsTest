@@ -10,4 +10,6 @@
 
     <string name="edit_text_empty_error">The field cannot be empty</string>
     <string name="invalid_credentials">Invalid credentials</string>
+
+    <string name="payments">Payments</string>
 </resources>
