@@ -23,4 +23,10 @@ object Const {
 		}
 	}
 
+	object NavDestinations {
+
+		const val Login = "login"
+		const val Payments = "payments"
+	}
+
 }
