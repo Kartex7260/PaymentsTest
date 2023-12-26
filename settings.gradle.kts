@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "PaymentsTest"
 include(":app")
- 
+include(":paymentscompose")
