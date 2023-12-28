@@ -1,10 +1,14 @@
 package kanti.paymentstest.data.model.payments
 
+import androidx.compose.runtime.Stable
 import kanti.paymentstest.data.model.common.ErrorMessage
 
 sealed class PaymentsResult {
 
-	data object Success : PaymentsResult()
+	@Stable
+	class Success(
+		val payments: List<Payment>
+	) : PaymentsResult()
 
 	data object NoConnection : PaymentsResult()
 

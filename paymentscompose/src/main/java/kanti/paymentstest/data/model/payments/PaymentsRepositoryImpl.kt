@@ -1,9 +1,9 @@
 package kanti.paymentstest.data.model.payments
 
+import kanti.paymentstest.data.model.authorization.LoginToken
 import kanti.paymentstest.data.model.payments.datasource.local.PaymentsLocalDataSource
 import kanti.paymentstest.data.model.payments.datasource.remote.PaymentsRemoteDataSource
 import kanti.paymentstest.data.model.payments.datasource.remote.PaymentsRemoteResult
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class PaymentsRepositoryImpl @Inject constructor(
@@ -11,15 +11,12 @@ class PaymentsRepositoryImpl @Inject constructor(
 	private val localDataSource: PaymentsLocalDataSource
 ) : PaymentsRepository {
 
-	override val payments: Flow<List<Payment>>
-		get() = localDataSource.payments
-
-	override suspend fun getPayments(authToken: String): PaymentsResult {
-		return when (val remoteResult = remoteDataSource.getPayments(authToken)) {
+	override suspend fun getPayments(authToken: LoginToken): PaymentsResult {
+		return when (val remoteResult = remoteDataSource.getPayments(authToken.token)) {
 			is PaymentsRemoteResult.Success -> {
 				localDataSource.deleteCache()
 				localDataSource.cachePayments(remoteResult.payments)
-				PaymentsResult.Success
+				PaymentsResult.Success(remoteResult.payments)
 			}
 			is PaymentsRemoteResult.NoConnection -> {
 				PaymentsResult.NoConnection

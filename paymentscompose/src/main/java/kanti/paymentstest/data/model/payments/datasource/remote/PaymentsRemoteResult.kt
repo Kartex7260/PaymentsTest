@@ -1,12 +1,12 @@
 package kanti.paymentstest.data.model.payments.datasource.remote
 
 import kanti.paymentstest.data.model.common.ErrorMessage
-import kanti.paymentstest.data.model.payments.PaymentImpl
+import kanti.paymentstest.data.model.payments.Payment
 
 sealed class PaymentsRemoteResult {
 
 	class Success(
-		val payments: List<PaymentImpl>
+		val payments: List<Payment>
 	) : PaymentsRemoteResult()
 
 	data object NoConnection : PaymentsRemoteResult()
