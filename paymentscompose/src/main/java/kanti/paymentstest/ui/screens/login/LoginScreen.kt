@@ -1,12 +1,8 @@
 package kanti.paymentstest.ui.screens.login
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.LinearProgressIndicator
@@ -22,7 +18,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -118,13 +113,13 @@ private fun LoginScreenContent(
 				.fillMaxWidth()
 		) {
 			val (textRef, buttonRef) = createRefs()
+
 			val text = if (incorrectCredentials) {
 				stringResource(id = R.string.invalid_credentials)
 			} else if (state is LoginUiState.NoConnection) {
 				stringResource(id = R.string.no_connection)
 			} else if (state is LoginUiState.Error) {
-				val stg = stringResource(id = R.string.unexpected_error)
-				"$stg: ${state.errorMessage}"
+				"${state.errorMessage.errorCode}: ${state.errorMessage.errorMessage}"
 			} else if (state is LoginUiState.Fail) {
 				val stg = stringResource(id = R.string.unexpected_error)
 				"$stg: ${state.message}\n${state.throwable?.toString()}"
@@ -136,7 +131,7 @@ private fun LoginScreenContent(
 				modifier = Modifier
 					.constrainAs(textRef) {
 						top.linkTo(parent.top)
-				  		start.linkTo(parent.start, margin = 16.dp)
+						start.linkTo(parent.start, margin = 16.dp)
 						end.linkTo(buttonRef.start, margin = 16.dp)
 						width = Dimension.fillToConstraints
 					},
@@ -195,7 +190,7 @@ private fun PreviewLoginScreenError() {
 			state = LoginUiState.Error(
 				ErrorMessage(
 					101,
-					"Unexpected error ohayo iasjskj dkasd kaksj ddkas "
+					"Network bred"
 				)
 			),
 			login = { _, _ -> }
@@ -212,7 +207,7 @@ private fun PreviewLoginScreenFail() {
 	PaymentsTestTheme {
 		LoginScreenContent(
 			state = LoginUiState.Fail(
-				message = "Error",
+				message = "Tested exception",
 				throwable = IllegalStateException("Tested exception")
 			),
 			login = { _, _ -> }
